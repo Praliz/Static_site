@@ -1,6 +1,5 @@
 from markdown_to_blocks import block_to_block_type, markdown_to_blocks
-from src.textnode import text_node_to_html_node
-from src.htmlnode import HTMLNODE, LeafNode , ParentNode
+
 markdown = md = """
 This is **bolded** paragraph
 text in a p

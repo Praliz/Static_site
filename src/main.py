@@ -1,6 +1,6 @@
 import os
 import shutil
-
+from markdown_to_html_node import block_to_block_type
 source_dir = "Static"
 dest_dir = "public"
 def main():
@@ -26,5 +26,12 @@ def recurse_static(source_dir , dest_dir):
         else:
             print(f"this is not a file{source_path}")
             recurse_static(source_path,destination_path)
+            
+def extract_title(markdown):
+    lines = markdown.split("\n")
+    for line in lines:
+        if line == "# ":
+            result = line.strip("# ").strip()
+    return result
 main()
 
