@@ -1,6 +1,6 @@
 import os
 import shutil
-from markdown_to_html_node import markdown_to_html_node
+from markdown_blocks import markdown_to_html_node
 
 source_dir = "Static"
 dest_dir = "public"
@@ -41,6 +41,13 @@ def generate_page(from_path , template_path, dest_path):
         content_temp = file.read()
     html_node = markdown_to_html_node(content_from)
     html_string = html_node.to_html()
-    content_temp.replace("{{ Title }}",title)
-    content_temp.replace("{{Content}}",html_string)
+    full_page = content_temp.replace("{{ Title }}",title)
+    full_page = full_page.replace("{{ Content }}",html_string)
+    
+    dir_path = os.path.dirname(dest_path)
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    with open(dest_path,"w") as file:
+            file.write(full_page)
+            
     

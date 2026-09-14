@@ -18,5 +18,4 @@ def markdown_to_html_node(markdown):
     for block in split_mark:
         block_type_list.append(block_to_block_type(block))
     
-    print()
 markdown_to_html_node(markdown)
