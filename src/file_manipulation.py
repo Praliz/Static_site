@@ -49,5 +49,9 @@ def generate_page(from_path , template_path, dest_path):
         os.makedirs(dir_path)
     with open(dest_path,"w") as file:
             file.write(full_page)
-            
-    
+# Working on recursing though the content so multiple pages gets imported to public        
+#def recurse_content(dir_path_content, template_path, dest_dir_path):
+#   if not os.path.exists(dir_path_content):
+#      os.mkdir(dest_dir_path)
+#   for content_file in os.listdir(dir_path_content):
+        
