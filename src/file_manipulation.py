@@ -2,15 +2,12 @@ import os
 import shutil
 from markdown_blocks import markdown_to_html_node
 
-source_dir = "Static"
-dest_dir = "public"
-
 def cleaning():
-    if os.path.exists("public"):
-        shutil.rmtree("public")
-        os.mkdir("public")
+    if os.path.exists("docs"):
+        shutil.rmtree("docs")
+        os.mkdir("docs")
     else:
-        os.mkdir("public")
+        os.mkdir("docs")
 
 def recurse_static(source_dir , dest_dir):
     if not os.path.exists(dest_dir):    
@@ -32,7 +29,7 @@ def extract_title(markdown):
             return line.strip("# ").strip()
     raise Exception("No H1 was found")
 
-def generate_page(from_path , template_path, dest_path):
+def generate_page(from_path , template_path, dest_path,basepath):
     print(f"Generating Page from:{from_path} to:{dest_path} using:{template_path}")
     with open(from_path) as file:
         content_from = file.read()
@@ -43,23 +40,24 @@ def generate_page(from_path , template_path, dest_path):
     html_string = html_node.to_html()
     full_page = content_temp.replace("{{ Title }}",title)
     full_page = full_page.replace("{{ Content }}",html_string)
-    
+    full_page = full_page.replace(('src="/'),(f'src="{basepath}'))
+    full_page = full_page.replace(('href="/'),(f'href="{basepath}'))
     dir_path = os.path.dirname(dest_path)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
     with open(dest_path,"w") as file:
             file.write(full_page)
             
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path,basepath):
     for file_content in os.listdir(dir_path_content):
         file_in_path = os.path.join(dir_path_content, file_content)
         if os.path.isfile(file_in_path):
             if file_in_path.endswith(".md"):
                 dest_file_name = file_content.replace(".md",".html")
                 dest_file_path = os.path.join(dest_dir_path,dest_file_name)
-                generate_page(file_in_path,template_path,dest_file_path)
+                generate_page(file_in_path,template_path,dest_file_path,basepath)
         else:
             dest_subfolder = os.path.join(dest_dir_path,file_content)
             os.makedirs(dest_subfolder,exist_ok=True)
-            generate_pages_recursive(file_in_path,template_path,dest_subfolder)
+            generate_pages_recursive(file_in_path,template_path,dest_subfolder,basepath)
 
